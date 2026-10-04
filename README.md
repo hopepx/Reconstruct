@@ -22,6 +22,10 @@ The original order and contact handlers display a confirmation. They do not proc
 
 ## Public demo
 
+[Open the live demo](https://hopepx.github.io/Reconstruct/).
+
+The public layout retains the original logo, light-blue navigation, wide product slideshow, marble background and three product-feature sections. Spacing, typography and mobile navigation have been refined.
+
 The refreshed version recreates the product browsing and form interactions in the browser. It does not run the ASP.NET backend. Demo account mode stores only a display name in sessionStorage, with a memory fallback; there are no passwords or genuine user accounts. Order and contact entries are not transmitted or persisted. Sample contact values use the reserved `example.com` domain.
 
 The demo is a coursework showcase, not a real store, and its policy pages are examples. No purchases, deliveries, messages or subscriptions occur. Product descriptions are not medical advice, and original product photographs are included as coursework reference material. The underlying third-party brand and imagery are not claimed as original artwork.
