@@ -2,11 +2,28 @@
   'use strict';
   const $ = selector => document.querySelector(selector);
   const menu = $('.menu-button');
-  menu?.addEventListener('click', () => {
-    const open = $('#main-nav').classList.toggle('open');
+  const header = $('.site-header');
+  const nav = $('#main-nav');
+  const mobileNav = matchMedia('(max-width: 1024px)');
+  function setMenu(open, restoreFocus = false) {
+    header.classList.toggle('menu-open', open);
+    nav.classList.toggle('open', open);
     menu.setAttribute('aria-expanded', String(open));
     menu.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.querySelector('span').textContent = open ? '×' : '+';
+    if (restoreFocus) menu.focus();
+  }
+  menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && header.classList.contains('menu-open')) setMenu(false, true);
   });
+  document.addEventListener('click', event => {
+    if (header.classList.contains('menu-open') && !header.contains(event.target)) setMenu(false);
+  });
+  nav.addEventListener('click', event => {
+    if (event.target.closest('a') && mobileNav.matches) setMenu(false);
+  });
+  mobileNav.addEventListener('change', () => setMenu(false));
   let memoryName = '';
   const getName = () => { try { return sessionStorage.getItem('reconstruct-demo-name') || memoryName; } catch { return memoryName; } };
   const setName = name => { memoryName = name; try { name ? sessionStorage.setItem('reconstruct-demo-name', name) : sessionStorage.removeItem('reconstruct-demo-name'); } catch { /* Browser storage may be disabled. */ } };
@@ -18,6 +35,7 @@
   const gallery = $('#gallery-image');
   if (gallery) {
     const images = [
+      { src:'assets/original-home.png', alt:'Original homepage banner showing a man holding his lower back', caption:'The original homepage image' },
       { src:'assets/original-banner.png', alt:'Original Reconstruct Back Belt product banner', caption:'The Reconstruct Back Belt' },
       { src:'assets/belt.png', alt:'Original Reconstruct back belt product view', caption:'The original product design' },
       { src:'assets/dial.png', alt:"Close-up of the belt's adjustment dial", caption:'Reel-based adjustment system' }
@@ -31,7 +49,7 @@
       gallery.alt = entry.alt;
       gallery.dataset.slide = String(index);
       $('#gallery-caption').textContent = entry.caption;
-      $('#gallery-count').textContent = `${String(index + 1).padStart(2, '0')} / 03`;
+      $('#gallery-count').textContent = `${String(index + 1).padStart(2, '0')} / ${String(images.length).padStart(2, '0')}`;
       dots.forEach((dot, number) => dot.setAttribute('aria-pressed', String(number === index)));
     }
     $('#gallery-prev').addEventListener('click', () => show(index - 1));
