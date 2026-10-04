@@ -18,20 +18,30 @@
   const gallery = $('#gallery-image');
   if (gallery) {
     const images = [
-      { src:'assets/dial.png', alt:"Close-up of the back belt's adjustment dial", caption:'A turn of the dial.' },
-      { src:'assets/belt.png', alt:'Reconstruct back belt with its original project branding', caption:'The original product concept.' },
-      { src:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'assets/dial.png' : 'assets/belt-motion.gif', alt:'Back belt product view from the original project', caption:'A closer look at the belt.' }
+      { src:'assets/original-banner.png', alt:'Original Reconstruct Back Belt product banner', caption:'The Reconstruct Back Belt' },
+      { src:'assets/belt.png', alt:'Original Reconstruct back belt product view', caption:'The original product design' },
+      { src:'assets/dial.png', alt:"Close-up of the belt's adjustment dial", caption:'Reel-based adjustment system' }
     ];
     let index = 0;
-    function show(direction) {
-      index = (index + direction + images.length) % images.length;
+    const dots = [...document.querySelectorAll('[data-slide]')];
+    function show(next) {
+      index = (next + images.length) % images.length;
       const entry = images[index];
       gallery.src = entry.src;
       gallery.alt = entry.alt;
+      gallery.dataset.slide = String(index);
       $('#gallery-caption').textContent = entry.caption;
+      $('#gallery-count').textContent = `${String(index + 1).padStart(2, '0')} / 03`;
+      dots.forEach((dot, number) => dot.setAttribute('aria-pressed', String(number === index)));
     }
-    $('#gallery-prev').addEventListener('click', () => show(-1));
-    $('#gallery-next').addEventListener('click', () => show(1));
+    $('#gallery-prev').addEventListener('click', () => show(index - 1));
+    $('#gallery-next').addEventListener('click', () => show(index + 1));
+    dots.forEach(dot => dot.addEventListener('click', () => show(Number(dot.dataset.slide))));
+    gallery.closest('.original-gallery').addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        event.preventDefault(); show(index + (event.key === 'ArrowRight' ? 1 : -1));
+      }
+    });
   }
   const currency = cents => '$' + (cents / 100).toFixed(2);
   const order = $('#order-form');
