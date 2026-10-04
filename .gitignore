@@ -1,0 +1,21 @@
+# Visual Studio and build output
+.vs/
+[Bb]in/
+[Oo]bj/
+packages/
+PrecompiledWeb/
+*.suo
+*.user
+*.userosscache
+# Local account databases and credentials
+*.mdf
+*.ldf
+*.db
+*.sqlite*
+.env
+.env.*
+!.env.example
+*.pfx
+*.publishsettings
+# Local server and deployment output
+.sites-runtime/
